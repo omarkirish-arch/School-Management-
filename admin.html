@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Maamulka Jadwalka</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- 1. LOGIN OVERLAY -->
+    <div id="login-section" class="login-overlay">
+        <div class="login-card">
+            <div style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h2>Gudaha Maamulka</h2>
+            <p>Fadlan geli Username-ka iyo Password-ka Maamulka</p>
+
+            <form id="admin-login-form" onsubmit="event.preventDefault(); loginAdmin();">
+                <div class="input-wrapper" style="margin-bottom: 12px;">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="admin-user" class="login-input" placeholder="Geli Username-ka Maamulka" required autocomplete="username">
+                </div>
+
+                <div class="input-wrapper" style="position: relative; margin-bottom: 16px;">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="admin-pass" class="login-input" placeholder="Geli Password-ka Maamulka" required autocomplete="current-password" style="padding-right: 2.8rem;">
+                    <i class="fa-solid fa-eye" id="admin-pass-eye" onclick="toggleAdminPassVisibility()" style="left: auto; right: 1rem; cursor: pointer; color: #9CA3AF;" title="Muuji/Qari Password-ka"></i>
+                </div>
+
+                <button type="submit" class="btn-login" style="width: 100%;">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Gudaha Gal
+                </button>
+            </form>
+            <p id="error-msg"
+                style="color: #EF4444; font-size: 0.85rem; margin-top: 1rem; display: none; font-weight: 500;">
+                <i class="fa-solid fa-circle-exclamation"></i> Username-ka ama Password-ka waa khalad!
+            </p>
+
+            <div style="margin-top: 2rem;">
+                <a href="index.html"
+                    style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s;">
+                    <i class="fa-solid fa-arrow-left"></i> Ku noqo jadwalka ardayda
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. MAIN DASHBOARD PANELS -->
+    <div id="admin-panel" class="dashboard-wrapper" style="display: none;">
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fa-solid fa-graduation-cap"></i> Maamulka
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" id="nav-subjects" class="active" onclick="switchTab('subjects')"><i
+                            class="fa-solid fa-book"></i> Maadooyinka</a></li>
+                <li><a href="#" id="nav-teachers" onclick="switchTab('teachers')"><i class="fa-solid fa-users-tie"></i>
+                        Macalimiinta</a></li>
+                <li><a href="#" id="nav-students" onclick="switchTab('students')"><i
+                            class="fa-solid fa-user-graduate"></i> Ardayda</a></li>
+                <li><a href="#" id="nav-attendance" onclick="switchTab('attendance')"><i
+                            class="fa-solid fa-clipboard-user"></i> Xaadirinta</a></li>
+                <li><a href="#" id="nav-schedule" onclick="switchTab('schedule')"><i
+                            class="fa-solid fa-calendar-days"></i> Dhisida Jadwalka</a></li>
+                <li><a href="#" id="nav-fees" onclick="switchTab('fees')"><i
+                            class="fa-solid fa-file-invoice-dollar"></i> Lacagaha & Maaliyadda</a></li>
+                <li><a href="#" id="nav-grades" onclick="switchTab('grades')"><i
+                            class="fa-solid fa-square-poll-vertical"></i> Natiijooyinka (Grades)</a></li>
+                <li><a href="#" id="nav-settings" onclick="switchTab('settings')"><i class="fa-solid fa-gear"></i>
+                        Settings (Amniga)</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="index.html" class="back-link">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Ku Noqo App-ka
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-title">
+                    <h1>Maamulka Jadwalka</h1>
+                    <p>Halkaan waxaad ka maamuli kartaa dhammaan xiisadaha dugsiga.</p>
+                </div>
+                <div class="admin-profile" style="display:flex; align-items:center; gap:0.75rem;">
+                    <a href="index.html" class="btn btn-secondary" style="padding: 0.5rem 0.8rem; font-size: 0.85rem; border-radius: 6px; text-decoration: none; border: 1px solid #d1d5db; background: #fff;" title="Bogga Hore">
+                        <i class="fa-solid fa-house"></i> Bogga Hore
+                    </a>
+                    <a href="teacher.html" class="btn btn-secondary" style="padding: 0.5rem 0.8rem; font-size: 0.85rem; border-radius: 6px; text-decoration: none; border: 1px solid #C7D2FE; background: #EEF2FF; color: #3730A3; font-weight: 600;" title="Portal-ka Macallinka">
+                        <i class="fa-solid fa-chalkboard-user"></i> Portal-ka Macallinka
+                    </a>
+                    <button id="admin-theme-toggle" class="btn btn-secondary" onclick="toggleAdminDarkMode()" style="padding: 0.5rem 0.8rem; font-size: 0.85rem; border-radius: 6px; cursor: pointer; border: 1px solid #d1d5db; background: #fff;" title="Badal Dark/Light Mode">
+                        <i class="fa-solid fa-moon"></i> Dark Mode
+                    </button>
+                    <button class="btn btn-secondary" onclick="manualRefreshData()" style="padding: 0.5rem 0.8rem; font-size: 0.85rem; border-radius: 6px; cursor: pointer; border: 1px solid #d1d5db; background: #fff;">
+                        <i class="fa-solid fa-rotate"></i> Cusboonaysii DB
+                    </button>
+                    <button class="btn btn-secondary" onclick="logoutAdmin()" style="padding: 0.5rem 0.8rem; font-size: 0.85rem; border-radius: 6px; cursor: pointer; border: 1px solid #fee2e2; color: #dc2626; background: #fff;">
+                        <i class="fa-solid fa-right-from-bracket"></i> Ka bax
+                    </button>
+                    <div style="text-align: right;">
+                        <span style="display:block; font-weight: 600; font-size: 0.95rem;">Maamulaha</span>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Agaasimaha</span>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=4F46E5&color=fff" alt="Admin"
+                        class="profile-avatar">
+                </div>
+            </header>
+
+            <!-- Stats Overview -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon icon-blue">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="stat-subjects">0</h3>
+                        <p>Wadarta Maadooyinka</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-green">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="stat-teachers">0</h3>
+                        <p>Wadarta Macalimiinta</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-purple">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="stat-students">0</h3>
+                        <p>Ardayda Diiwaangashan</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"
+                        style="background: linear-gradient(135deg, #fcebb6 0%, #f8b500 100%); color: #b45309;">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="stat-classes">4</h3>
+                        <p>Fasalada Jira (Forms)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area (Form on left, Table on right) -->
+            <div class="content-grid" id="view-subjects">
+
+                <!-- Left Column: Add Form -->
+                <div class="glass-panel">
+                    <h3 class="form-title"><i class="fa-solid fa-circle-plus"></i> Kudar Maado Cusub</h3>
+
+                    <form id="add-subject-form">
+                        <div class="form-group">
+                            <label>Fasalka (Form-ka)</label>
+                            <select id="sub-form" class="form-control" required>
+                                <option value="class1">Fasalka 1-aad (Grade 1)</option>
+                                <option value="class2">Fasalka 2-aad (Grade 2)</option>
+                                <option value="class3">Fasalka 3-aad (Grade 3)</option>
+                                <option value="class4">Fasalka 4-aad (Grade 4)</option>
+                                <option value="class5">Fasalka 5-aad (Grade 5)</option>
+                                <option value="class6">Fasalka 6-aad (Grade 6)</option>
+                                <option value="class7">Fasalka 7-aad (Grade 7)</option>
+                                <option value="class8">Fasalka 8-aad (Grade 8)</option>
+                                <option value="form1">Fasalka 9-aad (Form 1)</option>
+                                <option value="form2">Fasalka 10-aad (Form 2)</option>
+                                <option value="form3">Fasalka 11-aad (Form 3)</option>
+                                <option value="form4">Fasalka 12-aad (Form 4)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Magaca Maadada</label>
+                            <input type="text" id="sub-name" class="form-control" placeholder="Geli magaca maadada (tusaale: Geography, Physics...)" list="common-subjects-list" required>
+                            <datalist id="common-subjects-list">
+                                <option value="Arabic">
+                                <option value="Islamic">
+                                <option value="English">
+                                <option value="Biology">
+                                <option value="Chemistry">
+                                <option value="History">
+                                <option value="Physics">
+                                <option value="Math">
+                                <option value="Somali">
+                                <option value="Technology">
+                                <option value="Geography">
+                                <option value="Business">
+                                <option value="Economics">
+                                <option value="Accounting">
+                            </datalist>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Magaca Macalinka (Ikhtiyaari)</label>
+                            <select id="sub-teacher" class="form-control">
+                                <!-- Populated dynamically by admin.js -->
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Midabka Theme-ka</label>
+                            <select id="sub-color" class="form-control">
+                                <option value="blue">Buluug (Blue)</option>
+                                <option value="green">Cagaar (Green)</option>
+                                <option value="red">Casan (Red)</option>
+                                <option value="purple">Huron (Purple)</option>
+                                <option value="teal">Tiyaal (Teal)</option>
+                                <option value="orange">Liimi (Orange)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-login" style="margin-top: 1rem;"><i
+                                class="fa-solid fa-check"></i> Keydi Maadada</button>
+                    </form>
+                </div>
+
+                <!-- Right Column: Subjects Table -->
+                <div class="glass-panel">
+                    <div class="table-header-container">
+                        <h3 class="form-title" style="margin-bottom:0; border:none;"><i
+                                class="fa-solid fa-list-check"></i> Liiska Maadooyinka Jira</h3>
+                        <button class="btn-action" onclick="resetToDefaults()"
+                            style="background:#F3F4F6; color:var(--text-muted); font-size:0.8rem;">
+                            <i class="fa-solid fa-rotate-right"></i> Dib ugu celi sidii hore (Reset)
+                        </button>
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Fasalka</th>
+                                    <th>Maadada</th>
+                                    <th>Macalinka</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subjects-tbody">
+                                <!-- Populated by admin.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Teachers View Area -->
+            <div class="content-grid" id="view-teachers" style="display:none;">
+
+                <!-- Left Column: Add Teacher Form -->
+                <div class="glass-panel">
+                    <h3 class="form-title"><i class="fa-solid fa-user-plus"></i> Diwaangeli Macalin</h3>
+
+                    <form id="add-teacher-form">
+                        <div class="form-group">
+                            <label>Magaca Buuxa ee Macalinka</label>
+                            <input type="text" id="teacher-name" class="form-control" required
+                                placeholder="Tusaale: Dr. Cali Waare">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Username (Aqoonsiga Gelitaanka ee Macalinka)</label>
+                            <input type="text" id="teacher-username" class="form-control" required
+                                placeholder="Tusaale: cali, faadumo, axmed">
+                            <small style="color:var(--text-muted); font-size:0.8rem; display:block; margin-top:4px;">
+                                <i class="fa-solid fa-circle-info"></i> Magacan ayuu macallinku ku gali doonaa Portal-kiisa.
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Password (Furaha Sirta ee Macalinka)</label>
+                            <input type="text" id="teacher-password" class="form-control" required
+                                placeholder="Geli furaha sirta ah (Tusaale: 123456 ama Cali@2026)">
+                            <small style="color:var(--text-muted); font-size:0.8rem; display:block; margin-top:4px;">
+                                <i class="fa-solid fa-lock"></i> Furahan sii macallinka si uu ugu galo bogga macalinka.
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Sawirka Macalinka</label>
+                            <div style="border: 1px dashed var(--border-color); padding: 1rem; border-radius: var(--radius-md); background: #F9FAFB; text-align: center; margin-top: 0.5rem; cursor: pointer; transition: 0.2s;"
+                                onclick="document.getElementById('teacher-img').click()" id="upload-wrapper">
+                                <i class="fa-solid fa-cloud-arrow-up"
+                                    style="font-size: 2rem; color: var(--text-muted); margin-bottom: 0.5rem;"></i>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);" id="upload-text">Guji halkan si
+                                    aad u doorato sawirka (.jpg, .png)</p>
+                            </div>
+                            <input type="file" id="teacher-img" accept="image/*" style="display: none;">
+                        </div>
+
+                        <button type="submit" class="btn-login" style="margin-top: 1rem;"><i
+                                class="fa-solid fa-user-check"></i> Keydi Macalinka</button>
+                    </form>
+                </div>
+
+                <!-- Right Column: Teachers Table -->
+                <div class="glass-panel">
+                    <h3 class="form-title"><i class="fa-solid fa-users"></i> Macalimiinta Dugsiga</h3>
+                    <div style="overflow-x: auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Sawir</th>
+                                    <th>Magaca Macalinka</th>
+                                    <th>Username</th>
+                                    <th>Password</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teachers-tbody">
+                                <!-- Populated by admin.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Students View Area -->
+            <div class="content-grid" id="view-students" style="display:none;">
+                <!-- Left: Add Student Form -->
+                <div class="glass-panel">
+                    <h3 class="form-title"><i class="fa-solid fa-user-plus"></i> Diwaangeli Arday cusub</h3>
+
+                    <form id="add-student-form">
+                        <div class="form-group">
+                            <label>ID-ga Ardayga (Aqoonsi)</label>
+                            <input type="text" id="student-roll" class="form-control" required
+                                placeholder="Tusaale: ST-001">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Magaca Buuxa ee Ardayga</label>
+                            <input type="text" id="student-name" class="form-control" required
+                                placeholder="Tusaale: Axmed Cabdi...">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Telefoonka Waalidka</label>
+                            <input type="tel" id="student-phone" class="form-control" required
+                                placeholder="Tusaale: 061XXXXXXX">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fasalka (Form-ka)</label>
+                            <select id="student-form" class="form-control" required>
+                                <option value="class1">Fasalka 1-aad (Grade 1)</option>
+                                <option value="class2">Fasalka 2-aad (Grade 2)</option>
+                                <option value="class3">Fasalka 3-aad (Grade 3)</option>
+                                <option value="class4">Fasalka 4-aad (Grade 4)</option>
+                                <option value="class5">Fasalka 5-aad (Grade 5)</option>
+                                <option value="class6">Fasalka 6-aad (Grade 6)</option>
+                                <option value="class7">Fasalka 7-aad (Grade 7)</option>
+                                <option value="class8">Fasalka 8-aad (Grade 8)</option>
+                                <option value="form1">Fasalka 9-aad (Form 1)</option>
+                                <option value="form2">Fasalka 10-aad (Form 2)</option>
+                                <option value="form3">Fasalka 11-aad (Form 3)</option>
+                                <option value="form4">Fasalka 12-aad (Form 4)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-login"
+                            style="margin-top: 1rem; background: var(--secondary);"><i
+                                class="fa-solid fa-user-graduate"></i> Keydi Ardayga</button>
+                    </form>
+                </div>
+
+                <!-- Right: Students Table -->
+                <div class="glass-panel">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1rem;">
+                        <h3 class="form-title" style="margin-bottom: 0; border: none;"><i class="fa-solid fa-list"></i> Liiska Ardayda Dugsiga</h3>
+                        <input type="text" id="search-student" onkeyup="renderStudentsTable()" placeholder="Raadi ID ama Magac..." class="form-control" style="width: auto; min-width: 200px; padding: 0.4rem 0.8rem; border-radius: 20px;">
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID-ga</th>
+                                    <th>Magaca Ardayga</th>
+                                    <th>Fasalka</th>
+                                    <th>Waalidka</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="students-tbody">
+                                <!-- Populated by admin.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attendance View Area -->
+            <div id="view-attendance" style="display:none;">
+                <div class="glass-panel" style="width: 100%; margin-bottom: 1.5rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                        <h3 class="form-title" style="margin-bottom: 0; border: none;"><i
+                                class="fa-solid fa-clipboard-list"></i> Xaadirinta Ardayda</h3>
+
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <div>
+                                <label
+                                    style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.2rem;">Taariikhda</label>
+                                <input type="date" id="att-date" class="form-control"
+                                    style="padding: 0.5rem; width: auto;" required>
+                            </div>
+                            <div>
+                                <label
+                                    style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.2rem;">Fasalka</label>
+                                <select id="att-form" class="form-control" style="padding: 0.5rem; width: auto;"
+                                    onchange="loadAttendance()">
+                                    <option value="class1">Fasalka 1-aad (Grade 1)</option>
+                                    <option value="class2">Fasalka 2-aad (Grade 2)</option>
+                                    <option value="class3">Fasalka 3-aad (Grade 3)</option>
+                                    <option value="class4">Fasalka 4-aad (Grade 4)</option>
+                                    <option value="class5">Fasalka 5-aad (Grade 5)</option>
+                                    <option value="class6">Fasalka 6-aad (Grade 6)</option>
+                                    <option value="class7">Fasalka 7-aad (Grade 7)</option>
+                                    <option value="class8">Fasalka 8-aad (Grade 8)</option>
+                                    <option value="form1">Fasalka 9-aad (Form 1)</option>
+                                    <option value="form2">Fasalka 10-aad (Form 2)</option>
+                                    <option value="form3">Fasalka 11-aad (Form 3)</option>
+                                    <option value="form4">Fasalka 12-aad (Form 4)</option>
+                                </select>
+                            </div>
+                            <div style="align-self: flex-end;">
+                                <button onclick="downloadAttendanceCsv()" class="btn-login"
+                                    style="background: var(--text-main); padding: 0.5rem 1rem; border-radius: 8px;">
+                                    <i class="fa-solid fa-download"></i> La bax (CSV)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="width: 100%;">
+                    <div style="overflow-x: auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Magaca Ardayga</th>
+                                    <th>Xaalada Maanta</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendance-tbody">
+                                <!-- Populated by admin.js -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <button onclick="saveAttendance()" class="btn-login" style="margin-top: 1.5rem; max-width: 250px;">
+                        <i class="fa-solid fa-sd-card"></i> Keydi Xaadirinta
+                    </button>
+                    <span id="att-save-msg"
+                        style="color: var(--secondary); margin-left: 1rem; font-weight: 500; opacity: 0; transition: opacity 0.3s;">Waa
+                        la keydiyay ✅</span>
+                </div>
+            </div>
+
+            <!-- Schedule Builder View -->
+            <div id="view-schedule" style="display:none;">
+                <div class="glass-panel" style="width: 100%;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3 class="form-title" style="margin-bottom: 0; border: none;"><i
+                                class="fa-solid fa-calendar-week"></i> Gacan Ku Dhisida Jadwalka</h3>
+                        <div>
+                            <label
+                                style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.2rem;">Dooro
+                                Fasalka aad dhisayso</label>
+                            <select id="schedule-form-select" class="form-control"
+                                style="padding: 0.5rem; width: auto; min-width: 200px;"
+                                onchange="loadScheduleBuilder()">
+                                <option value="class1">Fasalka 1-aad (Grade 1)</option>
+                                <option value="class2">Fasalka 2-aad (Grade 2)</option>
+                                <option value="class3">Fasalka 3-aad (Grade 3)</option>
+                                <option value="class4">Fasalka 4-aad (Grade 4)</option>
+                                <option value="class5">Fasalka 5-aad (Grade 5)</option>
+                                <option value="class6">Fasalka 6-aad (Grade 6)</option>
+                                <option value="class7">Fasalka 7-aad (Grade 7)</option>
+                                <option value="class8">Fasalka 8-aad (Grade 8)</option>
+                                <option value="form1">Fasalka 9-aad (Form 1)</option>
+                                <option value="form2">Fasalka 10-aad (Form 2)</option>
+                                <option value="form3">Fasalka 11-aad (Form 3)</option>
+                                <option value="form4">Fasalka 12-aad (Form 4)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div
+                        style="margin-bottom: 1rem; padding: 1rem; background: var(--bg-main); border-radius: var(--radius-md); font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <i class="fa-solid fa-circle-info" style="color: var(--primary);"></i>
+                            Jadwalka aad halkan ku xulato ayaa si toos ah uga muuqan doona shabakadda ardayda.
+                        </div>
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--primary); font-size: 0.85rem; background: #EEF2FF; padding: 6px 12px; border-radius: 6px; border: 1px solid #C7D2FE;">
+                            <input type="checkbox" id="toggle-hide-selected-sub" checked onchange="updateScheduleSelectOptions()">
+                            ⚡ Qaabka Ka-Hortagga Ku-Celinta Maadada (Auto-hide selected subjects on same day)
+                        </label>
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th style="min-width: 120px;">Maalinta</th>
+                                    <th>C1 (07:30 - 08:30)</th>
+                                    <th>C2 (08:30 - 09:30)</th>
+                                    <th>C3 (09:30 - 10:30)</th>
+                                    <th>Nasasho</th>
+                                    <th>C4 (10:50 - 11:40)</th>
+                                    <th>C5 (11:40 - 12:30)</th>
+                                    <th>C6 (12:30 - 13:30)</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="schedule-tbody">
+                                <!-- Generated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 1.5rem;">
+                        <button onclick="saveScheduleBuilder()" class="btn-login" style="max-width: 280px; background: var(--primary);">
+                            <i class="fa-solid fa-save"></i> Keydi Jadwalka Fasalkaan
+                        </button>
+                        <button onclick="seedAllSchedules()" class="btn-login" style="max-width: 320px; background: var(--secondary);">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Otomaatig Ku Buuxi Fasalada All
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. STUDENT FEES & FINANCIAL ANALYTICS VIEW -->
+            <div id="view-fees" style="display:none;">
+                <!-- Financial Overview Cards -->
+                <div class="stats-grid" style="margin-bottom: 1.5rem;">
+                    <div class="stat-card">
+                        <div class="stat-icon icon-green">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-fee-monthly">$0</h3>
+                            <p>Lacagaha Bishan Soo Galay</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon icon-blue">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-fee-yearly">$0</h3>
+                            <p>Lacagaha Sanadkan Soo Galay</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon icon-purple">
+                            <i class="fa-solid fa-vault"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-fee-total">$0</h3>
+                            <p>Wadarta Guud ee Soo Galay</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #FEE2E2; color: #DC2626;">
+                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-fee-unpaid" style="color: #DC2626;">$0</h3>
+                            <p>Lacagaha Lagu Leeyahay (Unpaid)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fees Content Grid (Form on left, Table on right) -->
+                <div class="content-grid">
+                    <!-- Left Column: Add/Update Fee Form -->
+                    <div class="glass-panel">
+                        <h3 class="form-title"><i class="fa-solid fa-cash-register"></i> Diiwaangeli Lacag-bixinta Ardayga</h3>
+
+                        <form id="add-fee-form">
+                            <div class="form-group">
+                                <label>Dooro Ardayga</label>
+                                <select id="fee-student-select" class="form-control" required>
+                                    <!-- Populated dynamically by admin.js -->
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Bisha Lacagta (Month)</label>
+                                <select id="fee-month" class="form-control" required>
+                                    <option value="September">September</option>
+                                    <option value="October">October</option>
+                                    <option value="November">November</option>
+                                    <option value="December">December</option>
+                                    <option value="January">January</option>
+                                    <option value="February">February</option>
+                                    <option value="March">March</option>
+                                    <option value="April">April</option>
+                                    <option value="May">May</option>
+                                    <option value="June">June</option>
+                                    <option value="July">July</option>
+                                    <option value="August">August</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Sanadka (Year)</label>
+                                <input type="number" id="fee-year" class="form-control" value="2026" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Wadarta Lacagta ($ USD)</label>
+                                <input type="number" step="0.01" id="fee-amount" class="form-control" placeholder="Tusaale: 25.00" value="25.00" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Xaalada Lacagta (Payment Status)</label>
+                                <select id="fee-status" class="form-control" required>
+                                    <option value="PAID">Wuu Bixiyay (Paid ✅)</option>
+                                    <option value="UNPAID">Maanu Bixin (Unpaid ❌)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Taariikhda Bixinta</label>
+                                <input type="date" id="fee-date" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Faahfaahin / Xusuusin (Optional)</label>
+                                <input type="text" id="fee-notes" class="form-control" placeholder="Tusaale: Receipt #102">
+                            </div>
+
+                            <button type="submit" class="btn-login" style="margin-top: 1rem; background: var(--secondary);">
+                                <i class="fa-solid fa-floppy-disk"></i> Keydi Lacag-bixinta
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Right Column: Fees Table & Search -->
+                    <div class="glass-panel">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+                            <h3 class="form-title" style="margin-bottom:0; border:none;"><i class="fa-solid fa-receipt"></i> Liiska Maaliyadda Ardayda</h3>
+                            
+                            <div style="display: flex; gap: 0.5rem;">
+                                <select id="filter-fee-status" onchange="renderFeesTable()" class="form-control" style="width: auto; padding: 0.4rem 0.6rem; border-radius: 6px;">
+                                    <option value="ALL">Dhammaan</option>
+                                    <option value="PAID">Bixiyay (Paid ✅)</option>
+                                    <option value="UNPAID">Maanu Bixin (Unpaid ❌)</option>
+                                </select>
+                                <input type="text" id="search-fee-student" onkeyup="renderFeesTable()" placeholder="Raadi Arday..." class="form-control" style="width: auto; min-width: 160px; padding: 0.4rem 0.8rem; border-radius: 20px;">
+                            </div>
+                        </div>
+
+                        <div style="overflow-x: auto;">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Ardayga</th>
+                                        <th>Fasalka</th>
+                                        <th>Bisha/Sanadka</th>
+                                        <th>Lacagta</th>
+                                        <th>Xaalada</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fees-tbody">
+                                    <!-- Populated by admin.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. SECTION: STUDENT GRADES / NATIIJOOYINKA -->
+            <div id="view-grades" style="display:none;">
+                <!-- Ardayga La Doortay Selector Bar -->
+                <div class="glass-panel" style="padding: 1rem 1.25rem; margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 44px; height: 44px; border-radius: 10px; background: #EEF2FF; color: #4F46E5; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                            <i class="fa-solid fa-user-graduate"></i>
+                        </div>
+                        <div>
+                            <h4 style="margin: 0; font-size: 1.05rem;" id="selected-student-display-name">
+                                <span style="color:var(--text-muted); font-weight:500;"><i class="fa-solid fa-arrow-pointer"></i> Fadlan dooro arday si aad u aragto natiijadiisa</span>
+                            </h4>
+                            <p style="margin: 3px 0 0 0; font-size: 0.82rem; color: var(--text-muted);" id="selected-student-display-meta">
+                                Kaadhadhkan waxay muujinayaan uun inta maado ee ardayga la doortay uu baasay, inta uu dhacay iyo boqolleydiisa.
+                            </p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <label for="grade-overview-student-select" style="font-size: 0.85rem; font-weight: 600; white-space: nowrap;">
+                            <i class="fa-solid fa-filter"></i> Dooro Ardayga:
+                        </label>
+                        <select id="grade-overview-student-select" onchange="setSelectedGradeStudent(this.value, 'overview')" style="padding: 0.5rem 0.9rem; border-radius: 8px; border: 1.5px solid #4F46E5; font-size: 0.9rem; font-weight: 600; cursor: pointer; outline: none; min-width: 250px;">
+                            <option value="">-- Dooro Arday --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Class Switcher Tabs (Fasalka uu hadda dhigto & Fasaladiisa Hore) -->
+                <div id="student-class-tabs-container" class="glass-panel" style="display: none; padding: 0.85rem 1.25rem; margin-bottom: 1.25rem; border-radius: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; border-left: 4px solid var(--primary, #4F46E5);">
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 6px;">
+                            <i class="fa-solid fa-graduation-cap" style="color: #4F46E5;"></i> Fasallada Natiijada:
+                        </span>
+                        <div id="student-class-tabs" style="display: flex; gap: 6px; flex-wrap: wrap;">
+                            <!-- Class tabs generated dynamically -->
+                        </div>
+                    </div>
+                    <div id="student-class-active-badge" style="font-size: 0.82rem; color: var(--text-muted);">
+                        <!-- Dynamic active class status text -->
+                    </div>
+                </div>
+
+                <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 1.5rem;">
+                    <div class="stat-card">
+                        <div class="stat-icon icon-blue">
+                            <i class="fa-solid fa-square-poll-vertical"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-total-grades">0</h3>
+                            <p id="stat-total-grades-label">Wadarta Maadooyinka</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon icon-green">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-passed-grades">0</h3>
+                            <p id="stat-passed-grades-label">Maadooyinka la Baasay (Pass ✅)</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon icon-red" style="background: #FEE2E2; color: #EF4444;">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-failed-grades">0</h3>
+                            <p id="stat-failed-grades-label">Maadooyinka la Dhacay (Fail ❌)</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon icon-purple">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="stat-pass-rate">0%</h3>
+                            <p id="stat-pass-rate-label">Boqolleyda Ardayga (Celcelis)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-grid" style="grid-template-columns: 1fr 1.5fr;">
+                    <!-- Grade Entry Form -->
+                    <div class="glass-panel">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:8px;">
+                            <h3 class="form-title" style="margin:0;"><i class="fa-solid fa-pen-to-square"></i> Gelinta Natiijooyinka</h3>
+                            <div style="display:flex; gap:6px;">
+                                <button type="button" id="btn-mode-single" class="btn btn-secondary" onclick="toggleGradeMode('single')" style="font-size:0.75rem; padding:0.3rem 0.6rem; background:var(--primary); color:white; border:none; border-radius:4px; cursor:pointer;">
+                                    1 Maado
+                                </button>
+                                <button type="button" id="btn-mode-bulk" class="btn btn-secondary" onclick="toggleGradeMode('bulk')" style="font-size:0.75rem; padding:0.3rem 0.6rem; background:#E5E7EB; color:#374151; border:none; border-radius:4px; cursor:pointer;">
+                                    ⚡ Dhamaan Maadooyinka
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Single Subject Form -->
+                        <form id="add-grade-form">
+                            <div class="form-group">
+                                <label>Dooro Ardayga</label>
+                                <select id="grade-student" class="form-control" required>
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Dooro Maadada</label>
+                                <select id="grade-subject" class="form-control" required>
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Muximada Imtixaanka (Term)</label>
+                                <select id="grade-term" class="form-control">
+                                    <option value="Term 1">Term 1 (Sanad-dhexad)</option>
+                                    <option value="Term 2">Term 2 (Sanad-dhamaad)</option>
+                                    <option value="Midterm">Midterm Exam</option>
+                                    <option value="Final">Final Exam</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Dhibcaha (0 - 100)</label>
+                                <input type="number" id="grade-score" class="form-control" min="0" max="100" placeholder="tusaale: 85" required>
+                                <small style="color: var(--text-muted); display: block; margin-top: 4px;">
+                                    📌 Dhibcaha &ge; 50 = <strong>Basiyay ✅</strong>, Dhibcaha &lt; 50 = <strong>Dhacay ❌</strong>
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label>Astaamo / Notes (Ikhtiyaari)</label>
+                                <input type="text" id="grade-notes" class="form-control" placeholder="tusaale: Waxqabad wanaagsan">
+                            </div>
+                            <button type="submit" class="btn-login" style="margin-top: 1rem;">
+                                <i class="fa-solid fa-check"></i> Keydi Natiijada
+                            </button>
+                        </form>
+
+                        <!-- Subjects Bulk Form -->
+                        <form id="bulk-grade-form" style="display:none;">
+                            <div class="form-group">
+                                <label>Dooro Ardayga</label>
+                                <select id="bulk-grade-student" class="form-control" required>
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Term-ka Imtixaanka</label>
+                                <select id="bulk-grade-term" class="form-control">
+                                    <option value="Term 1">Term 1 (Sanad-dhexad)</option>
+                                    <option value="Term 2">Term 2 (Sanad-dhamaad)</option>
+                                    <option value="Final">Final Exam</option>
+                                </select>
+                            </div>
+
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin: 1rem 0 0.5rem 0;">
+                                <label id="bulk-subjects-label" style="font-weight:600; font-size:0.85rem;">Maadooyinka Ardayga (0-100):</label>
+                                <button type="button" onclick="presetAllScores(75)" style="font-size:0.75rem; padding:0.2rem 0.5rem; background:#DCFCE7; color:#15803D; border:1px solid #86EFAC; border-radius:4px; cursor:pointer;">
+                                    ⚡ Wada Baasi (75%)
+                                </button>
+                            </div>
+
+                            <div id="bulk-12-subjects-grid" style="max-height: 280px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding-right: 4px;">
+                                <!-- Dynamic Subject Inputs populated by admin.js -->
+                            </div>
+
+                            <div style="display:flex; gap:8px; margin-top:1rem;">
+                                <button type="submit" class="btn-login" style="flex:1;">
+                                    <i class="fa-solid fa-check-double"></i> Keydi Maadooyinka
+                                </button>
+                                <button type="button" onclick="seedAllStudents12Grades()" class="btn btn-secondary" style="font-size:0.8rem; background:#E0E7FF; color:#3730A3; border:1px solid #C7D2FE; cursor:pointer;" title="Ku shub maadooyinka dhamaan ardayda">
+                                    ⚡ Ku shub Dhamaan Ardayda
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Student Results Overview Table -->
+                    <div class="glass-panel">
+                        <div class="table-header-container" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:1rem;">
+                            <h3><i class="fa-solid fa-list-check"></i> Liiska Natiijooyinka Ardayda</h3>
+                            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                                <select id="grade-filter-student" onchange="setSelectedGradeStudent(this.value, 'filter')" style="padding:0.4rem 0.8rem; border-radius:6px; border:1px solid #ccc; font-size:0.85rem;">
+                                    <option value="all">-- Dhammaan Ardayda --</option>
+                                </select>
+                                <input type="text" id="grade-search" placeholder="Ka raadi magac ama roll..." onkeyup="filterGradesTable()" style="padding:0.4rem 0.8rem; border-radius:6px; border:1px solid #ccc; font-size:0.85rem;">
+                                <select id="grade-filter-status" onchange="filterGradesTable()" style="padding:0.4rem 0.8rem; border-radius:6px; border:1px solid #ccc; font-size:0.85rem;">
+                                    <option value="all">Dhammaan Xaaladaha (All Statuses)</option>
+                                    <option value="Pass">Pass ✅ (Basiyay)</option>
+                                    <option value="Fail">Fail ❌ (Dhacay)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="overflow-x: auto;">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Ardayga</th>
+                                        <th>Fasalka</th>
+                                        <th>Maadada</th>
+                                        <th>Term</th>
+                                        <th>Dhibcaha</th>
+                                        <th>Xaalada</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="grades-tbody">
+                                    <!-- Populated by admin.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings & Security View Area -->
+            <div id="view-settings" style="display:none; max-width: 650px; margin: 1.5rem auto 3rem auto;">
+                <div class="glass-panel" style="padding: 2.2rem; background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft);">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(79, 70, 229, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin: 0;">Amniga Akoonka Maamulka</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Beddel Username-ka iyo Password-ka Maamulka</p>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px solid var(--border-color); margin: 1.25rem 0 1.5rem 0;">
+
+                    <form id="admin-settings-form" onsubmit="event.preventDefault(); saveAdminSettings();">
+                        <div class="form-group" style="margin-bottom: 1.25rem;">
+                            <label style="font-weight: 600; display: block; margin-bottom: 0.4rem; font-size: 0.95rem;">Username-ka Maamulka</label>
+                            <div class="input-wrapper" style="margin-bottom: 0;">
+                                <i class="fa-solid fa-user"></i>
+                                <input type="text" id="settings-admin-user" class="form-control login-input" required placeholder="Tusaale: admin">
+                            </div>
+                            <small style="color: var(--text-muted); font-size: 0.8rem; display: block; margin-top: 4px;">
+                                Magacan ayaad ku soo gali doontaa markaad furto bogga maamulka.
+                            </small>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label style="font-weight: 600; display: block; margin-bottom: 0.4rem; font-size: 0.95rem;">Password-ka Cusub ee Maamulka</label>
+                            <div class="input-wrapper" style="position: relative; margin-bottom: 0;">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" id="settings-admin-pass" class="form-control login-input" required placeholder="Geli password cusub (Tusaale: Admin@2026)" style="padding-right: 2.8rem;">
+                                <i class="fa-solid fa-eye" id="settings-pass-eye" onclick="toggleSettingsPassVisibility()" style="left: auto; right: 1rem; cursor: pointer; color: #9CA3AF;" title="Muuji/Qari Password-ka"></i>
+                            </div>
+                            <small style="color: var(--text-muted); font-size: 0.8rem; display: block; margin-top: 4px;">
+                                Furahan sirta ah u dhowro si ammaan ah.
+                            </small>
+                        </div>
+
+                        <button type="submit" class="btn-login" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-weight: 600;">
+                            <i class="fa-solid fa-floppy-disk"></i> Keydi Isbeddelka
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- The exact script that powers the logic, untouched -->
+    <script src="admin.js"></script>
+</body>
+
+</html>

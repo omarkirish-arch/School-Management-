@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal-ka Ardayda | Jadwalka & Natiijooyinka</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <img src="https://ui-avatars.com/api/?name=Arday&background=2563EB&color=fff&rounded=true" alt="Profile" class="profile-pic">
+                <div>
+                    <h1 class="header-title" style="margin: 0;">Portal-ka Ardayda</h1>
+                    <span style="font-size: 0.78rem; color: var(--text-secondary);">Jadwalka Xiisadaha & Natiijooyinka</span>
+                </div>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <button id="theme-toggle-btn" class="notification-btn" title="Badal Dark/Light Mode">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <a href="index.html" class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.45rem 0.85rem; text-decoration: none; background: #EEF2FF; color: #3730A3; font-weight: 600; border-radius: var(--radius-md); border: 1px solid #C7D2FE; display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-house"></i> Bogga Hore
+                </a>
+            </div>
+        </header>
+
+        <!-- Subheader -->
+        <section class="subheader">
+            <p class="subtitle">JADWALKA TODDOBAADLAHA</p>
+            <h2 class="main-title">Toddobaadka<br>Waxbarashada 24</h2>
+            
+            <div class="filter-section" style="margin-bottom: 1rem;">
+                <select id="form-selector" class="form-select" style="display: block; width: 100%; padding: 0.75rem; border-radius: var(--radius-md); border: 1px solid #D1D5DB; font-family: 'Inter', sans-serif; font-size: 0.875rem; background-color: var(--white); cursor: pointer;">
+                    <option value="all">Dooro Fasalkaaga (Dhamaan 1 - 12)</option>
+                    <option value="class1">Fasalka 1-aad (Grade 1)</option>
+                    <option value="class2">Fasalka 2-aad (Grade 2)</option>
+                    <option value="class3">Fasalka 3-aad (Grade 3)</option>
+                    <option value="class4">Fasalka 4-aad (Grade 4)</option>
+                    <option value="class5">Fasalka 5-aad (Grade 5)</option>
+                    <option value="class6">Fasalka 6-aad (Grade 6)</option>
+                    <option value="class7">Fasalka 7-aad (Grade 7)</option>
+                    <option value="class8">Fasalka 8-aad (Grade 8)</option>
+                    <option value="form1">Fasalka 9-aad (Form 1)</option>
+                    <option value="form2">Fasalka 10-aad (Form 2)</option>
+                    <option value="form3">Fasalka 11-aad (Form 3)</option>
+                    <option value="form4">Fasalka 12-aad (Form 4)</option>
+                </select>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-secondary" style="width: 100%;">
+                    <i class="fa-solid fa-bars-staggered"></i> Sifee
+                </button>
+            </div>
+        </section>
+
+        <!-- Main Schedule Content -->
+        <main class="schedule-container">
+            <div class="schedule-grid" id="schedule-grid">
+                <!-- Javascript will populate the days and 6 periods dynamically here -->
+            </div>
+        </main>
+
+        <!-- Student Result & Historical Class Lookup Section -->
+        <section class="result-lookup-section" style="margin: 1.5rem 1rem; padding: 1.25rem; background: var(--white); border-radius: var(--radius-lg); border: 1px solid #E5E7EB; box-shadow: var(--shadow-sm);">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 0.75rem;">
+                <h3 style="font-size: 1.05rem; color: var(--text-primary); font-weight: 600;">
+                    <i class="fa-solid fa-square-poll-vertical" style="color: var(--accent-blue);"></i> Eeg Natiijadaada & Fasalladii Hore
+                </h3>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <input type="text" id="student-roll-input" placeholder="Geli Roll Number-kaaga ama Magaca (tusaale: 101, Mohamed...)" style="flex: 2; min-width: 170px; padding: 0.65rem 0.85rem; border-radius: var(--radius-md); border: 1px solid #D1D5DB; font-size: 0.875rem;">
+                    <select id="student-result-form" style="flex: 1.2; min-width: 140px; padding: 0.65rem 0.85rem; border-radius: var(--radius-md); border: 1px solid #D1D5DB; font-size: 0.875rem; background: var(--white); cursor: pointer;">
+                        <option value="all">📚 Dhammaan Fasallada</option>
+                        <option value="class1">Fasalka 1-aad (Grade 1)</option>
+                        <option value="class2">Fasalka 2-aad (Grade 2)</option>
+                        <option value="class3">Fasalka 3-aad (Grade 3)</option>
+                        <option value="class4">Fasalka 4-aad (Grade 4)</option>
+                        <option value="class5">Fasalka 5-aad (Grade 5)</option>
+                        <option value="class6">Fasalka 6-aad (Grade 6)</option>
+                        <option value="class7">Fasalka 7-aad (Grade 7)</option>
+                        <option value="class8">Fasalka 8-aad (Grade 8)</option>
+                        <option value="form1">Fasalka 9-aad (Form 1)</option>
+                        <option value="form2">Fasalka 10-aad (Form 2)</option>
+                        <option value="form3">Fasalka 11-aad (Form 3)</option>
+                        <option value="form4">Fasalka 12-aad (Form 4)</option>
+                    </select>
+                    <button onclick="searchStudentResult()" class="btn btn-secondary" style="background: var(--accent-blue); color: white; border: none; padding: 0.65rem 1.2rem; border-radius: var(--radius-md); font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-magnifying-glass"></i> Raadi
+                    </button>
+                </div>
+            </div>
+            <div id="student-result-card" style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
+                <!-- Dynamically populated by script.js -->
+            </div>
+        </section>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Bogga Hore</span>
+            </a>
+            <a href="student.html" class="nav-item active">
+                <div class="active-indicator">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span>Jadwalka</span>
+                </div>
+            </a>
+            <a href="#student-roll-input" class="nav-item" onclick="document.getElementById('student-roll-input').focus()">
+                <i class="fa-solid fa-square-poll-vertical"></i>
+                <span>Natiijada</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

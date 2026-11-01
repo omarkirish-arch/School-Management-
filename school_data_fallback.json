@@ -1,0 +1,29 @@
+{
+  "subjects": [
+    { "id": "1", "form": "form1", "tag": "ARABIC", "title": "Arabic", "tagColor": "green", "border": "green", "grade": "Fasalka 9-A", "teacherId": "t1", "macalinka": "Dr. Cali Waare" },
+    { "id": "2", "form": "form1", "tag": "ISLAMIC", "title": "Islamic", "tagColor": "blue", "border": "blue", "grade": "Fasalka 9-B", "teacherId": "t2", "macalinka": "Prof. Faadumo" },
+    { "id": "3", "form": "form2", "tag": "ENGLISH", "title": "English", "tagColor": "red", "border": "red", "grade": "Fasalka 10-A", "teacherId": "t3", "macalinka": "Jaamac Geyddid" },
+    { "id": "4", "form": "form2", "tag": "BIOLOGY", "title": "Biology", "tagColor": "purple", "border": "purple", "grade": "Fasalka 10-C", "teacherId": "t4", "macalinka": "Cabdi Maxamuud" },
+    { "id": "5", "form": "form3", "tag": "CHEMISTRY", "title": "Chemistry", "tagColor": "teal", "border": "teal", "grade": "Fasalka 11-A", "teacherId": "t5", "macalinka": "Maryan Jaamac" },
+    { "id": "6", "form": "form3", "tag": "HISTORY", "title": "History", "tagColor": "orange", "border": "orange", "grade": "Fasalka 11-B", "teacherId": "t6", "macalinka": "Dr. Xaliil Cali" },
+    { "id": "7", "form": "form4", "tag": "PHYSICS", "title": "Physics", "tagColor": "green", "border": "green", "grade": "Fasalka 12-A", "teacherId": "t7", "macalinka": "Xaliimo Warsame" },
+    { "id": "8", "form": "form4", "tag": "MATH", "title": "Math", "tagColor": "blue", "border": "blue", "grade": "Fasalka 12-C", "teacherId": "t8", "macalinka": "Saciidyo Axmed" }
+  ],
+  "students": [
+    { "id": "s_1", "roll": "101", "name": "Axmed Maxamed Cali", "phone": "0615111111", "form": "form1" },
+    { "id": "s_2", "roll": "102", "name": "Faadumo Cabdi Xasan", "phone": "0615222222", "form": "form2" },
+    { "id": "s_3", "roll": "103", "name": "Jaamac Cali Xasan", "phone": "0615999999", "form": "form1" },
+    { "id": "s_4", "roll": "104", "name": "Deeqa Cumar Nuur", "phone": "0615333333", "form": "form3" },
+    { "id": "s_5", "roll": "105", "name": "Liibaan Yuusuf Warsame", "phone": "0615444444", "form": "form4" }
+  ],
+  "attendance": [],
+  "fees": [
+    { "feeId": 1, "studentId": "s_1", "studentName": "Axmed Maxamed Cali", "rollNumber": "101", "classForm": "form1", "feeMonth": "Oktoobar", "feeYear": 2026, "amount": 25, "status": "PAID", "paymentDate": "2026-10-15", "notes": "Bixiyay" },
+    { "feeId": 2, "studentId": "s_2", "studentName": "Faadumo Cabdi Xasan", "rollNumber": "102", "classForm": "form2", "feeMonth": "Oktoobar", "feeYear": 2026, "amount": 25, "status": "UNPAID", "paymentDate": "", "notes": "Lama bixin" }
+  ],
+  "grades": [
+    { "gradeId": 1, "studentId": "s_1", "subjectId": "1", "classForm": "form1", "term": "Term 1", "examType": "Midterm", "score": 85, "maxScore": 100, "gradeLetter": "A", "remarks": "Aad u fiican", "studentName": "Axmed Maxamed Cali", "rollNumber": "101", "subjectTitle": "Arabic" },
+    { "gradeId": 2, "studentId": "s_1", "subjectId": "2", "classForm": "form1", "term": "Term 1", "examType": "Final", "score": 78, "maxScore": 100, "gradeLetter": "B", "remarks": "Wanaagsan", "studentName": "Axmed Maxamed Cali", "rollNumber": "101", "subjectTitle": "Islamic" },
+    { "gradeId": 3, "studentId": "s_3", "subjectId": "1", "classForm": "form1", "term": "Term 1", "examType": "Midterm", "score": 90, "maxScore": 100, "gradeLetter": "A", "remarks": "Heersare", "studentName": "Jaamac Cali Xasan", "rollNumber": "103", "subjectTitle": "Arabic" }
+  ]
+}

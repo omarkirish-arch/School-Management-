@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nidaamka Dugsiga | School Management Gateway</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .portal-landing-container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 2rem 1.25rem 4rem 1.25rem;
+        }
+        .hero-banner {
+            text-align: center;
+            padding: 2.5rem 1rem 3rem 1rem;
+            position: relative;
+        }
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #EEF2FF;
+            color: #4F46E5;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            border: 1px solid #C7D2FE;
+        }
+        .hero-title {
+            font-size: 2.35rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.25;
+            margin-bottom: 0.85rem;
+            letter-spacing: -0.02em;
+        }
+        .hero-desc {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .portals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.75rem;
+            margin-top: 1rem;
+        }
+        .portal-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            border: 1px solid #E5E7EB;
+            padding: 2rem 1.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+        .portal-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .portal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+        }
+        .card-student::before { background: linear-gradient(90deg, #2563EB, #60A5FA); }
+        .card-teacher::before { background: linear-gradient(90deg, #7C3AED, #A78BFA); }
+        .card-admin::before { background: linear-gradient(90deg, #4F46E5, #EC4899); }
+
+        .portal-icon-wrapper {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.85rem;
+            margin-bottom: 1.25rem;
+        }
+        .icon-student {
+            background: #EFF6FF;
+            color: #2563EB;
+        }
+        .icon-teacher {
+            background: #F5F3FF;
+            color: #7C3AED;
+        }
+        .icon-admin {
+            background: #EEF2FF;
+            color: #4F46E5;
+        }
+        .portal-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+        }
+        .badge-student { background: #DBEAFE; color: #1E40AF; }
+        .badge-teacher { background: #EDE9FE; color: #5B21B6; }
+        .badge-admin { background: #FCE7F3; color: #9D174D; }
+
+        .portal-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        .portal-text {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            margin-bottom: 1.5rem;
+        }
+        .portal-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.75rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+        .portal-features li {
+            font-size: 0.88rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .portal-features li i {
+            font-size: 0.95rem;
+        }
+        .btn-enter-portal {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 0.85rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-enter-student {
+            background: #2563EB;
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+        .btn-enter-student:hover {
+            background: #1D4ED8;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+        }
+        .btn-enter-teacher {
+            background: #7C3AED;
+            color: white;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+        .btn-enter-teacher:hover {
+            background: #6D28D9;
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+        }
+        .btn-enter-admin {
+            background: #4F46E5;
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        }
+        .btn-enter-admin:hover {
+            background: #4338CA;
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+        }
+        .quick-info-bar {
+            margin-top: 3.5rem;
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            border: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            text-align: center;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+        .info-item-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #F3F4F6;
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        .info-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        .info-sub {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            margin: 2px 0 0 0;
+        }
+        body.dark-mode .portal-card,
+        body.dark-mode .quick-info-bar {
+            background: #1F2937;
+            border-color: #374151;
+        }
+        body.dark-mode .hero-pill {
+            background: #312E81;
+            color: #C7D2FE;
+            border-color: #4338CA;
+        }
+        body.dark-mode .portal-name,
+        body.dark-mode .hero-title,
+        body.dark-mode .info-title,
+        body.dark-mode .portal-features li {
+            color: #F9FAFB;
+        }
+        body.dark-mode .info-item-icon {
+            background: #374151;
+            color: #60A5FA;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container" style="padding-bottom: 2rem;">
+        <!-- Header -->
+        <header class="app-header" style="max-width: 1180px; margin: 0 auto; width: 100%;">
+            <div class="header-left">
+                <div style="width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, #2563EB, #4F46E5); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1 class="header-title" style="margin: 0; font-size: 1.15rem; font-weight: 800;">Nidaamka Dugsiga</h1>
+                    <span style="font-size: 0.78rem; color: var(--text-secondary);">School Management System 2026</span>
+                </div>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <button id="theme-toggle-btn" class="notification-btn" title="Badal Dark/Light Mode" style="width: 40px; height: 40px; border-radius: 10px; background: var(--white); border: 1px solid #D1D5DB; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Landing Content -->
+        <div class="portal-landing-container">
+            <!-- Hero Banner -->
+            <div class="hero-banner">
+                <div class="hero-pill">
+                    <i class="fa-solid fa-sparkles"></i> Nidaamka Waxbarashada & Maamulka Dugsiga
+                </div>
+                <h2 class="hero-title">Ku Soo Dhawoow Bogga Dugsiga</h2>
+                <p class="hero-desc">
+                    Fadlan dooro portal-ka aad u socoto si aad u gasho adeegyadaada waxbarasho, maamulka, ama jadwalkaaga:
+                </p>
+            </div>
+
+            <!-- Portals Grid -->
+            <div class="portals-grid">
+                <!-- 1. PORTAL-KA ARDAYDA -->
+                <div class="portal-card card-student">
+                    <div>
+                        <div class="portal-icon-wrapper icon-student">
+                            <i class="fa-solid fa-user-graduate"></i>
+                        </div>
+                        <span class="portal-badge badge-student">Ardayda & Waalidiinta</span>
+                        <h3 class="portal-name">Portal-ka Ardayda</h3>
+                        <p class="portal-text">
+                            Halkan waxaad ka heli kartaa dhammaan xiisadahaaga todobaadlaha ah iyo natiijooyinka imtixaanka.
+                        </p>
+                        <ul class="portal-features">
+                            <li><i class="fa-solid fa-circle-check" style="color: #2563EB;"></i> Jadwalka Xiisadaha Fasalkaaga (1 - 12)</li>
+                            <li><i class="fa-solid fa-circle-check" style="color: #2563EB;"></i> Eegida Natiijooyinka Imtixaanka (Term 1 & 2)</li>
+                            <li><i class="fa-solid fa-circle-check" style="color: #2563EB;"></i> Taariikhda Natiijooyinkii Fasalladii Hore</li>
+                        </ul>
+                    </div>
+                    <a href="student.html" class="btn-enter-portal btn-enter-student">
+                        <span>Gudaha Gal (Ardayda)</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- 2. PORTAL-KA MACALLINKA -->
+                <div class="portal-card card-teacher">
+                    <div>
+                        <div class="portal-icon-wrapper icon-teacher">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <span class="portal-badge badge-teacher">Macallimiinta Dugsiga</span>
+                        <h3 class="portal-name">Portal-ka Macallinka</h3>
+                        <p class="portal-text">
+                            Gal portal-ka macallimiinta si aad u aragto jadwalkaaga rasmiga ah iyo xiisadahaaga gaarka ah.
+                        </p>
+                        <ul class="portal-features">
+                            <li><i class="fa-solid fa-circle-check" style="color: #7C3AED;"></i> Jadwalka Gaarka ah ee Macallinka</li>
+                            <li><i class="fa-solid fa-circle-check" style="color: #7C3AED;"></i> Tirada Xiisadaha Sabti ilaa Arbaco</li>
+                            <li><i class="fa-solid fa-circle-check" style="color: #7C3AED;"></i> Soo Galitaanka Tooska ah ee Macallinka</li>
+                        </ul>
+                    </div>
+                    <a href="teacher.html" class="btn-enter-portal btn-enter-teacher">
+                        <span>Gudaha Gal (Macallinka)</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- 3. MAAMULKA DUGSIGA (ADMIN) -->
+                <div class="portal-card card-admin">
+                    <div>
+                        <div class="portal-icon-wrapper icon-admin">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <span class="portal-badge badge-admin">Agaasinka & Maamulka</span>
+                        <h3 class="portal-name">Maamulka Dugsiga (Admin)</h3>
+                        <p class="portal-text">
+                            Qeybta maamulka guud ee xogta dugsiga, xisaabaadka, jadwalka, macallimiinta, iyo ardayda.
+                        </p>
+                        <ul class="portal-features">
+                            <li><i class="fa-solid fa-circle-check" style="color: #4F46E5;"></i> Diiwaanka Ardayda, Macallimiinta & Fasallada</li>
+                            <li><i class="fa-solid fa-circle-check" style="color: #4F46E5;"></i> Gelinta & Maamulidda Natiijooyinka</li>
+                            <li><i class="fa-solid fa-circle-check" style="color: #4F46E5;"></i> Dhisidda Jadwalka & Maamulka Xisaabaadka</li>
+                        </ul>
+                    </div>
+                    <a href="admin.html" class="btn-enter-portal btn-enter-admin">
+                        <span>Gudaha Gal (Maamulka)</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Information Bar -->
+            <div class="quick-info-bar">
+                <div class="info-item">
+                    <div class="info-item-icon">
+                        <i class="fa-solid fa-calendar-week"></i>
+                    </div>
+                    <div>
+                        <h4 class="info-title">Xiisadaha Dugsiga</h4>
+                        <p class="info-sub">Sabti ilaa Arbaco (07:30 - 13:30)</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-icon">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <div>
+                        <h4 class="info-title">Heerarka Waxbarashada</h4>
+                        <p class="info-sub">Fasalka 1-aad ilaa Fasalka 12-aad</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-icon">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <div>
+                        <h4 class="info-title">Xogta La Hubiyay</h4>
+                        <p class="info-sub">Oracle DB & JWT Secured System</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer style="text-align: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #E5E7EB; color: var(--text-secondary); font-size: 0.85rem;">
+                <p style="margin: 0;">&copy; 2026 Nidaamka Maamulka Dugsiga. Dhammaan xuquuqda way dhowran tahay.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Dark Mode Logic
+        function initTheme() {
+            const isDark = localStorage.getItem('app-theme') === 'dark';
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+            }
+            updateThemeIcon(isDark);
+        }
+
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark-mode');
+            localStorage.setItem('app-theme', isDark ? 'dark' : 'light');
+            updateThemeIcon(isDark);
+        }
+
+        function updateThemeIcon(isDark) {
+            const btn = document.getElementById('theme-toggle-btn');
+            if (!btn) return;
+            btn.innerHTML = isDark 
+                ? '<i class="fa-solid fa-sun" style="color: #F59E0B;"></i>' 
+                : '<i class="fa-solid fa-moon"></i>';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            document.getElementById('theme-toggle-btn')?.addEventListener('click', toggleTheme);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal-ka Macallinka | Jadwalka Macallinka</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .teacher-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+        }
+        .login-box {
+            max-width: 480px;
+            margin: 2rem auto;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid #E5E7EB;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+        .dashboard-header {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .teacher-badge {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .teacher-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-blue);
+        }
+        .timetable-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+        .day-column {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            border: 1px solid #E5E7EB;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        .day-title-head {
+            background: var(--accent-blue);
+            color: white;
+            padding: 0.75rem 1rem;
+            font-weight: 700;
+            text-align: center;
+        }
+        .slot-card {
+            padding: 0.85rem;
+            border-bottom: 1px solid #F3F4F6;
+            transition: transform 0.2s;
+        }
+        .slot-card:last-child {
+            border-bottom: none;
+        }
+        .slot-active {
+            background: #EFF6FF;
+            border-left: 4px solid var(--accent-blue);
+        }
+        .slot-free {
+            background: #FAFAFA;
+            color: #9CA3AF;
+        }
+        .slot-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .slot-class {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .slot-subject {
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <i class="fa-solid fa-chalkboard-user" style="font-size: 1.5rem; color: var(--accent-blue);"></i>
+                <h1 class="header-title" style="margin-left: 8px;">Portal-ka Macallinka</h1>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <button id="theme-toggle-btn" class="notification-btn" title="Badal Dark/Light Mode">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <a href="index.html" class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; text-decoration: none;">
+                    <i class="fa-solid fa-house"></i> Bogga Hore
+                </a>
+                <a href="student.html" class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; text-decoration: none;">
+                    <i class="fa-solid fa-user-graduate"></i> Ardayda
+                </a>
+                <a href="admin.html" class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; text-decoration: none;">
+                    <i class="fa-solid fa-user-shield"></i> Admin
+                </a>
+            </div>
+        </header>
+
+        <div class="teacher-container">
+            <!-- 1. TEACHER LOGIN VIEW -->
+            <div id="teacher-login-section">
+                <div class="login-box">
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <i class="fa-solid fa-user-tie" style="font-size: 2.5rem; color: var(--accent-blue); margin-bottom: 0.5rem;"></i>
+                        <h2 style="font-size: 1.25rem; color: var(--text-primary);">Soo Gal Portal-ka Macallinka</h2>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">Geli Username-kaaga iyo Password-kaaga gaarka ah si aad u gasho nidaamkaaga.</p>
+                    </div>
+
+                    <form id="teacher-login-form" onsubmit="handleTeacherLogin(event)">
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem;">
+                                <i class="fa-solid fa-user" style="color: var(--accent-blue); margin-right: 4px;"></i> Username-ka Macallinka
+                            </label>
+                            <input type="text" id="teacher-username-input" placeholder="Geli Username-kaaga" style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); border: 1px solid #D1D5DB; font-size: 0.95rem; box-sizing: border-box;" required autocomplete="username">
+                        </div>
+
+                        <div style="margin-bottom: 1.25rem;">
+                            <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem;">
+                                <i class="fa-solid fa-lock" style="color: var(--accent-blue); margin-right: 4px;"></i> Password-ka Macallinka
+                            </label>
+                            <div style="position: relative;">
+                                <input type="password" id="teacher-password-input" placeholder="Geli Password-kaaga" style="width: 100%; padding: 0.75rem; padding-right: 2.5rem; border-radius: var(--radius-md); border: 1px solid #D1D5DB; font-size: 0.95rem; box-sizing: border-box;" required autocomplete="current-password">
+                                <button type="button" onclick="togglePasswordVisibility()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #9CA3AF;">
+                                    <i id="toggle-pw-icon" class="fa-solid fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="login-error-msg" style="display:none; color: #DC2626; background: #FEE2E2; border: 1px solid #FCA5A5; padding: 0.6rem; border-radius: var(--radius-md); font-size: 0.85rem; margin-bottom: 1rem;"></div>
+
+                        <button type="submit" id="teacher-login-btn" class="btn btn-secondary" style="width: 100%; background: var(--accent-blue); color: white; border: none; padding: 0.8rem; font-weight: 600; cursor: pointer; border-radius: var(--radius-md); font-size: 0.95rem;">
+                            <i class="fa-solid fa-right-to-bracket"></i> Soo Gal Jadwalkaaga
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 2. TEACHER DASHBOARD & TIMETABLE VIEW -->
+            <div id="teacher-dashboard-section" style="display: none;">
+                <div class="dashboard-header">
+                    <div class="teacher-badge">
+                        <img id="teacher-img-header" src="https://ui-avatars.com/api/?name=Teacher" alt="Avatar" class="teacher-avatar">
+                        <div>
+                            <h2 id="teacher-name-header" style="margin: 0; font-size: 1.2rem; color: var(--text-primary);">Dr. Cali Waare</h2>
+                            <span id="teacher-username-tag" style="font-size: 0.85rem; color: var(--accent-blue); font-weight: 600;">@cali</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div style="background: #EEF2FF; padding: 0.5rem 1rem; border-radius: var(--radius-md); text-align: center;">
+                            <span style="font-size: 0.75rem; color: var(--text-secondary); display: block;">Wadarta Xisadaha/Sabti-Arbaco</span>
+                            <strong id="stat-teacher-total-slots" style="font-size: 1.1rem; color: var(--accent-blue);">0 Xiso</strong>
+                        </div>
+                        <button onclick="logoutTeacher()" class="btn btn-secondary" style="background: #FEE2E2; color: #B91C1C; border: none; padding: 0.6rem 1rem; cursor: pointer; border-radius: var(--radius-md); font-weight: 600;">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Ka Bax
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Timetable Container -->
+                <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="font-size: 1.1rem; color: var(--text-primary); font-weight: 700;"><i class="fa-solid fa-calendar-days" style="color: var(--accent-blue);"></i> Jadwalkaaga Rasmiga ah (Personalized Timetable)</h3>
+                </div>
+
+                <div class="timetable-grid" id="teacher-timetable-grid">
+                    <!-- Populated dynamically by teacher.js -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="teacher.js"></script>
+</body>
+</html>
